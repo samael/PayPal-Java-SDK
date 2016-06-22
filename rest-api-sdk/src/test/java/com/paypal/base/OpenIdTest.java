@@ -15,7 +15,6 @@ import com.paypal.api.openidconnect.CreateFromRefreshTokenParameters;
 import com.paypal.api.openidconnect.Session;
 import com.paypal.api.openidconnect.Tokeninfo;
 import com.paypal.api.openidconnect.Userinfo;
-import com.paypal.api.openidconnect.UserinfoParameters;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.OAuthTokenCredential;
 import com.paypal.base.rest.PayPalRESTException;

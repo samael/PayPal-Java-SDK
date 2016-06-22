@@ -5,7 +5,6 @@ import java.io.File;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import org.testng.log4testng.Logger;
 
 import com.paypal.base.rest.OAuthTokenCredential;
 import com.paypal.base.rest.PayPalRESTException;
@@ -16,9 +15,6 @@ import com.paypal.base.rest.PayPalResource;
  */
 @Test(enabled=false)
 public class OrderTestCase {
-
-	private static final Logger logger = Logger
-			.getLogger(OrderTestCase.class);
 	
 	private static Order order = null;
 	

@@ -1,8 +1,5 @@
 package com.paypal.api.payments;
 
-import com.paypal.base.rest.JSONFormatter;
-import com.paypal.api.payments.Address;
-
 public class PotentialPayerInfo  {
 
 	/**

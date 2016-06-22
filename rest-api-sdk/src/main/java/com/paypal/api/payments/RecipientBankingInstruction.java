@@ -1,7 +1,5 @@
 package com.paypal.api.payments;
 
-import com.paypal.base.rest.JSONFormatter;
-
 public class RecipientBankingInstruction  {
 
 	/**

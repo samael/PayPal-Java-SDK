@@ -1,0 +1,141 @@
+allprojects {
+    apply plugin: 'maven'
+    apply plugin: 'java'
+
+    group = 'com.paypal.sdk'
+    version = '1.7.0'
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
+
+    repositories {
+        mavenCentral()
+    }
+    // Currently disabled javadoc checks
+    tasks.withType(Javadoc).all { enabled = false }
+
+}
+
+// GLOBAL METHODS
+def getRepositoryUsername() {
+    return hasProperty('sonatypeUsername') ? sonatypeUsername : ""
+}
+
+def getRepositoryPassword() {
+    return hasProperty('sonatypePassword') ? sonatypePassword : ""
+}
+
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+
+// ## REST API SDK
+project(':rest-api-sdk') {
+    apply plugin: 'signing'
+    dependencies {
+        // General
+        compile 'com.google.code.gson:gson:2.2.2'
+        compile 'javax.servlet:servlet-api:2.5'
+
+        // Logging
+        compile 'org.apache.logging.log4j:log4j-api:2.1'
+        compile 'org.apache.logging.log4j:log4j-core:2.1'
+        compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.1'
+        compile 'org.slf4j:slf4j-api:1.7.21'
+
+        // Test
+        testCompile 'org.testng:testng:6.3.1'
+    }
+
+    test {
+        // enable TestNG support (default is JUnit)
+        useTestNG {
+            suites 'src/test/resources/testng.xml'
+            // show standard out and standard error of the test JVM(s) on the console
+            testLogging.showStandardStreams = true
+            // This is to force the test task to execute everytime.
+            outputs.upToDateWhen { false }
+        } 
+    }
+
+    // Run functional tests 
+    task functionalTest(type: Test, dependsOn: 'test') {
+        useTestNG() {
+            suites 'src/test/resources/functional.xml'
+        }
+    }
+
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+
+    // For including Source inside the main jar itself
+    jar {
+        from sourceSets.main.allSource
+    }
+
+    artifacts {
+        archives sourcesJar
+        archives javadocJar
+    }
+
+    uploadArchives {
+        repositories.mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
+            }
+
+            pom.project {
+                name 'rest-api-sdk'
+                groupId  'com.paypal.sdk'
+                artifactId 'rest-api-sdk'
+                packaging 'jar'
+                description 'PayPal SDK for integrating with the REST APIs'
+                url 'https://github.com/paypal/PayPal-Java-SDK.git'
+
+                scm {
+                    url 'https://github.com/paypal/PayPal-Java-SDK.git'
+                    connection 'scm:git:git://github.com/paypal/PayPal-Java-SDK.git'
+                }
+
+                licenses {
+                    license {
+                        name 'PayPal SDK License'
+                        url 'https://github.com/paypal/PayPal-Java-SDK/blob/master/LICENSE.txt'
+                        distribution 'repo'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'DL-PP-JAVA-SDK'
+                        name 'DL-PP-JAVA-SDK'
+                        email 'DL-PP-JAVA-SDK@paypal.com'
+                    }
+                }
+            }
+        }
+    }
+
+    signing {
+        required { isReleaseVersion && gradle.taskGraph.hasTask(tasks.uploadArchives) }
+        sign configurations.archives
+    }
+}
+
+// ## REST API SAMPLE PROJECT
+project(':rest-api-sample') {
+    apply plugin: 'jetty'
+
+    dependencies {
+        compile project(':rest-api-sdk')
+        compile 'javax.servlet:servlet-api:2.5'
+        compile 'log4j:log4j:1.2.14'
+        compile 'org.apache.logging.log4j:log4j-api:2.1'
+        compile 'org.apache.logging.log4j:log4j-core:2.1'
+    }
+}

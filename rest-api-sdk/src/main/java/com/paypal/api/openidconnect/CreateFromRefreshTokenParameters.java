@@ -36,7 +36,7 @@ public class CreateFromRefreshTokenParameters extends ClientCredentials {
 	/**
 	 * Set the Scope
 	 * 
-	 * @param redirectURI
+	 * @param scope
 	 */
 	public void setScope(String scope) {
 		containerMap.put(SCOPE, scope);

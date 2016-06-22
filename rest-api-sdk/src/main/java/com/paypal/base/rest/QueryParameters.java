@@ -5,7 +5,7 @@ import java.util.Map;
 
 /**
  * <code>QueryParameters</code> holds query parameters used for retrieving
- * {@link PaymentHistory} object.
+ * {@link com.paypal.api.payments.PaymentHistory} object.
  * 
  * @author kjayakumar
  * 

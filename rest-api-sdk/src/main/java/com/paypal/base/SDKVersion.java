@@ -4,13 +4,13 @@ public interface SDKVersion {
 	
 	/**
 	 * Returns the SDK Id
-	 * @return
+	 * @return String
 	 */
 	String getSDKId();
 	
 	/**
 	 * Returns the SDK Version
-	 * @return
+	 * @return String
 	 */
 	String getSDKVersion();
 

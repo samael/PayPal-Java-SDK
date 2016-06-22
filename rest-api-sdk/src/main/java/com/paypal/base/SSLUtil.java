@@ -37,7 +37,6 @@ import org.slf4j.LoggerFactory;
 import com.paypal.base.codec.binary.Base64;
 import com.paypal.base.exception.SSLConfigurationException;
 import com.paypal.base.rest.PayPalRESTException;
-import com.paypal.base.rest.PayPalResource;
 
 /**
  * Class SSLUtil

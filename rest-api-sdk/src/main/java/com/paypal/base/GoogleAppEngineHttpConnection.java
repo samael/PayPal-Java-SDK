@@ -5,10 +5,10 @@ import java.net.HttpURLConnection;
 import java.net.Proxy;
 import java.net.URL;
 
-
-import com.paypal.base.exception.SSLConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.paypal.base.exception.SSLConfigurationException;
 
 /**
  * A special HttpConnection for use on Google App Engine.

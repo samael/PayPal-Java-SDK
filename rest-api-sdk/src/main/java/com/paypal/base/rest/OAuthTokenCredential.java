@@ -18,7 +18,6 @@ import com.paypal.base.HttpConnection;
 import com.paypal.base.SDKUtil;
 import com.paypal.base.SDKVersion;
 import com.paypal.base.codec.binary.Base64;
-import com.paypal.base.credential.ICredential;
 import com.paypal.base.sdk.info.SDKVersionImpl;
 import com.paypal.base.util.UserAgentHeader;
 
@@ -39,7 +38,7 @@ import com.paypal.base.util.UserAgentHeader;
  * @author kjayakumar
  * 
  */
-public final class OAuthTokenCredential implements ICredential {
+public final class OAuthTokenCredential {
 
 	private static final Logger log = LoggerFactory.getLogger(OAuthTokenCredential.class);
 	
@@ -62,6 +61,11 @@ public final class OAuthTokenCredential implements ICredential {
 	 * Access Token that is generated
 	 */
 	private String accessToken;
+	
+	/**
+	 * Headers
+	 */
+	private Map<String, String> headers;
 
 	/**
 	 * Lifetime in seconds of the access token
@@ -125,6 +129,17 @@ public final class OAuthTokenCredential implements ICredential {
 		this.configurationMap = SDKUtil.combineDefaultMap(configurationMap);
 		this.sdkVersion = new SDKVersionImpl();
 	}
+	
+	/**
+	 * Sets Headers to Oauth Calls
+	 * 
+	 * @param headers
+	 * @return {@link OAuthTokenCredential}
+	 */
+	public OAuthTokenCredential setHeaders(Map<String, String> headers) {
+		this.headers = headers;
+		return this;
+	}
 
 	/**
 	 * Computes Access Token by placing a call to OAuth server using ClientID
@@ -134,7 +149,7 @@ public final class OAuthTokenCredential implements ICredential {
 	 * @throws PayPalRESTException
 	 */
 	public String getAccessToken() throws PayPalRESTException {
-		if (accessToken == null) {
+		if (accessToken == null || expiresIn() <= 0) {
 			accessToken = generateAccessToken();
 		}
 		return accessToken;
@@ -199,19 +214,21 @@ public final class OAuthTokenCredential implements ICredential {
 			connection = ConnectionManager.getInstance().getConnection();
 			httpConfiguration = getOAuthHttpConfiguration();
 			connection.createAndconfigureHttpConnection(httpConfiguration);
-			Map<String, String> headers = new HashMap<String, String>();
-			headers.put(Constants.AUTHORIZATION_HEADER, "Basic "
+			if (this.headers == null) {
+				this.headers = new HashMap<String, String>();
+			}
+			this.headers.put(Constants.AUTHORIZATION_HEADER, "Basic "
 					+ base64ClientID);
 
 			// Accept only json output
-			headers.put(Constants.HTTP_ACCEPT_HEADER,
+			this.headers.put(Constants.HTTP_ACCEPT_HEADER,
 					Constants.HTTP_CONTENT_TYPE_JSON);
-			headers.put(Constants.HTTP_CONTENT_TYPE_HEADER,
+			this.headers.put(Constants.HTTP_CONTENT_TYPE_HEADER,
 					Constants.HTTP_CONFIG_DEFAULT_CONTENT_TYPE);
 			UserAgentHeader userAgentHeader = new UserAgentHeader(
 					sdkVersion != null ? sdkVersion.getSDKId() : null,
 					sdkVersion != null ? sdkVersion.getSDKVersion() : null);
-			headers.putAll(userAgentHeader.getHeader());
+			this.headers.putAll(userAgentHeader.getHeader());
 			String postRequest = getRequestPayload();
 			
 			// log request
@@ -220,12 +237,12 @@ public final class OAuthTokenCredential implements ICredential {
 				log.warn("Log level cannot be set to DEBUG in " + Constants.LIVE + " mode. Skipping request/response logging...");
 			} 
 			if (!Constants.LIVE.equalsIgnoreCase(mode)) {
-				log.debug("request header: " + headers.toString());
+				log.debug("request header: " + this.headers.toString());
 				log.debug("request body: " + postRequest);
 			}
 			
 			// send request and get & log response
-			String jsonResponse = connection.execute("", postRequest, headers);
+			String jsonResponse = connection.execute("", postRequest, this.headers);
 			if (!Constants.LIVE.equalsIgnoreCase(mode)) {
 				log.debug("response header: " + connection.getResponseHeaderMap().toString());
 				log.debug("response: " + jsonResponse.toString());
@@ -305,5 +322,7 @@ public final class OAuthTokenCredential implements ICredential {
 						.get(Constants.GOOGLE_APP_ENGINE)));
 		return httpConfiguration;
 	}
+
+	
 
 }

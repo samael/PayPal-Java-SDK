@@ -93,7 +93,7 @@ public class RefundTestCase {
 		logger.info("**** Get Refund For Null ****");
 		logger.info("Generated Access Token = " + TokenHolder.accessToken);
 		try {
-			Refund refund = Refund.get(TokenHolder.accessToken, null);
+			Refund.get(TokenHolder.accessToken, null);
 		} catch (IllegalArgumentException e) {
 			Assert.assertTrue(e != null,
 					"IllegalArgument exception not thrown for null Refund Id");

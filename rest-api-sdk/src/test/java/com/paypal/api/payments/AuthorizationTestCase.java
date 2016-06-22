@@ -135,19 +135,19 @@ public class AuthorizationTestCase {
 	@Test(groups = "integration", dependsOnMethods = { "testAuthorizationCapture" }, expectedExceptions = { IllegalArgumentException.class })
 	public void testAuthorizationNullAccessToken() throws PayPalRESTException {
 		logger.info("**** Get Authorization (Null Access Token) ****");
-		Authorization auth = Authorization.get((String) null, "123");
+		Authorization.get((String) null, "123");
 	}
 	
 	@Test(groups = "integration", dependsOnMethods = { "testAuthorizationCapture" }, expectedExceptions = { IllegalArgumentException.class })
 	public void testAuthorizationNullAuthId() throws PayPalRESTException {
 		logger.info("**** Get Authorization (Null Auth ID) ****");
-		Authorization auth = Authorization.get(TokenHolder.accessToken, null);
+		Authorization.get(TokenHolder.accessToken, null);
 	}
 	
 	@Test(groups = "integration", dependsOnMethods = { "testAuthorizationCapture" }, expectedExceptions = { IllegalArgumentException.class })
 	public void testAuthorizationNullCapture() throws PayPalRESTException {
 		logger.info("**** Capture Authorization (Null Capture) ****");
-		Capture responsecapture = getAuthorization().capture(TokenHolder.accessToken, null);
+		getAuthorization().capture(TokenHolder.accessToken, null);
 	}
 	
 	
@@ -174,7 +174,9 @@ public class AuthorizationTestCase {
 		creditCard.setExpireYear(2018);
 		creditCard.setFirstName("Joe");
 		creditCard.setLastName("Shopper");
-		creditCard.setNumber("4417119669820331");
+		// Created random credit card number using https://www.paypal-knowledge.com/infocenter/index?page=content&widgetview=true&id=FAQ1413
+		// If this test fails, it could be related to excessive use of this credit card number. Replace with a new one, and test again.
+		creditCard.setNumber("4915910926483716");
 		creditCard.setType("visa");
 
 		Amount amount = new Amount();

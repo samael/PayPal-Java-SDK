@@ -5,8 +5,6 @@ package com.paypal.api.payouts.servlet;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -62,7 +60,6 @@ public class GetPayoutBatchStatusServlet extends HttpServlet {
 		req.getRequestDispatcher("response.jsp").forward(req, resp);
 	}
 
-	@SuppressWarnings("unchecked")
 	public PayoutBatch getPayoutBatchStatus(HttpServletRequest req,
 			HttpServletResponse resp) {
 

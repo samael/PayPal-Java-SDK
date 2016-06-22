@@ -28,8 +28,6 @@ public class PaymentTestCase {
 
 	private String createdPaymentID = null;
 
-	private String saleID = null;
-
 	public static final String CREATEDTIME = "2013-01-17T18:12:02.347Z";
 
 	public static final String CANCELURL = "http://somedomain.com";
@@ -255,7 +253,7 @@ public class PaymentTestCase {
 		// State of a created payment object is approved
 		Assert.assertEquals(true, obj.get("state").getAsString()
 				.equalsIgnoreCase("approved"));
-		saleID = obj.get("transactions").getAsJsonArray().get(0)
+		obj.get("transactions").getAsJsonArray().get(0)
 				.getAsJsonObject().get("related_resources").getAsJsonArray()
 				.get(0).getAsJsonObject().get("sale").getAsJsonObject()
 				.get("id").getAsString();

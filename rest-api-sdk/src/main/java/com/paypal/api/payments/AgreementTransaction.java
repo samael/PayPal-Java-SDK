@@ -46,12 +46,6 @@ public class AgreementTransaction  extends PayPalModel {
 	private String payerName;
 
 	/**
-	 * @deprecated use timeUpdated instead.
-	 * Time at which this transaction happened.
-	 */
-	private String timeUpdated;
-
-	/**
 	 * Time zone of time_updated field.
 	 */
 	private String timeZone;

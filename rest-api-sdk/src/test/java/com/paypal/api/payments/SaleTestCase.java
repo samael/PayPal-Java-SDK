@@ -156,7 +156,7 @@ public class SaleTestCase {
 	public void testGetSaleForNullId() {
 		logger.info("**** Sale Get for Null SaleId ****");
 		try {
-			Sale sale = Sale.get(TokenHolder.accessToken, null);
+			Sale.get(TokenHolder.accessToken, null);
 		} catch (IllegalArgumentException e) {
 			Assert.assertTrue(e != null,
 					"IllegalArgument exception not thrown for null Id");

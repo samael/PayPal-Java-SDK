@@ -5,9 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import org.testng.Assert;
@@ -204,7 +202,7 @@ public class CreditCardTestCase {
 		logger.info("Request = " + CreditCard.getLastRequest());
 		logger.info("Response = " + CreditCard.getLastResponse());
 		try {
-			CreditCard creditCards = CreditCard.get(
+			CreditCard.get(
 				TokenHolder.accessToken, createdCreditCardId);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -231,9 +229,8 @@ public class CreditCardTestCase {
 		logger.info("**** Get CreditCard Null ****");
 		logger.info("Generated Access Token = " + TokenHolder.accessToken);
 
-		CreditCard retrievedCreditCard;
 		try {
-			retrievedCreditCard = CreditCard.get(TokenHolder.accessToken, null);
+			CreditCard.get(TokenHolder.accessToken, null);
 		} catch (IllegalArgumentException e) {
 			Assert.assertTrue(e != null,
 					"Illegal Argument Exception not thrown for null arguments");

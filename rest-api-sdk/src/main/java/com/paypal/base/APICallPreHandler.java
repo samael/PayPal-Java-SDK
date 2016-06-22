@@ -2,18 +2,13 @@ package com.paypal.base;
 
 import java.util.Map;
 
-import com.paypal.base.credential.ICredential;
 import com.paypal.base.exception.ClientActionRequiredException;
 import com.paypal.base.exception.OAuthException;
+import com.paypal.base.rest.OAuthTokenCredential;
 
 /**
  * <code>APICallPreHandler</code> defines a high level abstraction for call
- * specific operations. The calls may be divided as per formats as SOAP or NVP.
- * PayPal Merchant Services are provided by {@link MerchantAPICallPreHandler} which
- * is a decorator over the basic {@link DefaultSOAPAPICallHandler}. PayPal Platform
- * Services are provided by {@link PlatformAPICallPreHandler}. PayPal REST API is
- * provided by {@link RESTAPICallPreHandler}
- * 
+ * specific operations. PayPal REST API is provided by {@link com.paypal.base.rest.RESTAPICallPreHandler}
  */
 public interface APICallPreHandler {
 
@@ -44,11 +39,11 @@ public interface APICallPreHandler {
 	String getEndPoint();
 
 	/**
-	 * Returns {@link ICredential} configured for the api call
+	 * Returns {@link OAuthTokenCredential} configured for the api call
 	 * 
 	 * @return ICredential object
 	 */
-	ICredential getCredential();
+	OAuthTokenCredential getCredential();
 
 	/**
 	 * Validates settings and integrity before call

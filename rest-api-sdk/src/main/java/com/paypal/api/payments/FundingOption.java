@@ -1,12 +1,6 @@
 package com.paypal.api.payments;
 
-import com.paypal.base.rest.JSONFormatter;
-import com.paypal.api.payments.FundingSource;
 import java.util.List;
-import com.paypal.api.payments.FundingInstrument;
-import com.paypal.api.payments.CurrencyConversion;
-import com.paypal.api.payments.InstallmentInfo;
-import com.paypal.api.payments.DefinitionsLinkdescription;
 
 public class FundingOption  {
 

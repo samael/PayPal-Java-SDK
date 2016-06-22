@@ -3,13 +3,18 @@ package com.paypal.base.rest;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.paypal.base.APICallPreHandler;
+import com.paypal.base.ClientCredentials;
 import com.paypal.base.ConfigManager;
 import com.paypal.base.ConnectionManager;
 import com.paypal.base.Constants;
@@ -17,10 +22,6 @@ import com.paypal.base.HttpConfiguration;
 import com.paypal.base.HttpConnection;
 import com.paypal.base.SDKUtil;
 import com.paypal.base.SDKVersion;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.paypal.base.exception.ClientActionRequiredException;
 import com.paypal.base.exception.HttpErrorException;
 
@@ -223,7 +224,7 @@ public abstract class PayPalResource extends PayPalModel{
 	 *            {@link APIContext} to be used for the call.
 	 * @param httpMethod
 	 *            Http Method verb
-	 * @param resource
+	 * @param resourcePath
 	 *            Resource URI path
 	 * @param payLoad
 	 *            Payload to Service
@@ -355,7 +356,7 @@ public abstract class PayPalResource extends PayPalModel{
 	 *            PayPal Request Id
 	 * @param sdkVersion
 	 *            {@link SDKVersion} instance
-	 * @return
+	 * @return APICallPreHandler
 	 */
 	public static APICallPreHandler createAPICallPreHandler(
 			Map<String, String> configurationMap, String payLoad,
@@ -451,8 +452,6 @@ public abstract class PayPalResource extends PayPalModel{
 	 *            Configuration to base the construction upon.
 	 * @param httpMethod
 	 *            HTTP Method
-	 * @param contentType
-	 *            Content-Type header
 	 * @param apiCallPreHandler
 	 *            {@link APICallPreHandler} for retrieving EndPoint
 	 * @return
@@ -492,4 +491,64 @@ public abstract class PayPalResource extends PayPalModel{
 		return httpConfiguration;
 	}
 
+	/**
+	 * Returns ClientCredentials with client id and client secret from configuration Map
+	 *
+	 * @return Client credentials
+     */
+	public static ClientCredentials getCredential() {
+		ClientCredentials credentials = new ClientCredentials();
+		Properties configFileProperties = getConfigFileProperties();
+		addConfigurations(configFileProperties);
+		credentials.setClientID(configurationMap.get(Constants.CLIENT_ID));
+		credentials.setClientSecret(configurationMap.get(Constants.CLIENT_SECRET));
+		return credentials;
+	}
+
+	/**
+	 * @deprecated Please use static method `getCredential` instead.
+	 *
+	 * Returns ClientCredentials with client id and client secret from configuration Map.
+	 *
+	 * @return Client credentials
+	 */
+	public ClientCredentials getClientCredential() {
+		return PayPalResource.getCredential();
+	}
+	
+	/**
+	 * Fetches the properties from default configuration file.
+	 * 
+	 * @return {@link Properties}
+	 */
+	private static Properties getConfigFileProperties() {
+		Properties properties = new Properties();
+		try {
+			properties.load(new FileReader(
+					new File(PayPalResource.class.getClassLoader().getResource(Constants.DEFAULT_CONFIGURATION_FILE).getFile())));
+		} catch (FileNotFoundException e) {
+			return null;
+		} catch (IOException e) {
+			return null;
+		}
+		return properties;
+	}
+
+	/**
+	 * Merges properties object with the configuration hash map. The configuration values are given higher priority.
+	 * 
+	 * @param properties
+	 */
+	private static void addConfigurations(Properties properties) {
+		if (configurationMap == null) {
+			configurationMap = new HashMap<String, String>();
+		}
+		if (properties != null) {
+			for (final String name : properties.stringPropertyNames()) {
+				if (!configurationMap.containsKey(name)) {
+					configurationMap.put(name, properties.getProperty(name));
+				}
+			}	
+		}
+	}
 }

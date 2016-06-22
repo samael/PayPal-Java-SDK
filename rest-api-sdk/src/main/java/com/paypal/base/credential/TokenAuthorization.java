@@ -4,7 +4,7 @@ package com.paypal.base.credential;
  * TokenAuthorization encapsulates third party token authorization. Used for
  * MERCHANT or PLATFORM APIs
  */
-public class TokenAuthorization implements ThirdPartyAuthorization {
+public class TokenAuthorization {
 
 	/**
 	 * Access token

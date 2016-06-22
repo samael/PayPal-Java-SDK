@@ -1,11 +1,13 @@
 REST API Samples
 ===================
 
+This project contains a set of samples that you can explore to understand what the REST APIs can do for you. The sample comes pre-configured with a test account but in case you need to try them against your account, you must obtain your client id and client secret from the developer portal.
 
-This sample project contains a set of simple command line samples that you can explore to understand what the REST APIs can do for you.
-The sample comes pre-configured with a test account but in case you need to try them against your account, you must
-   
-   * Obtain your client id and client secret from the developer portal
+Build and run the samples
+--------------------------
+
+  * Simply run `./gradlew clean jettyRun` to start jetty server.
+  * Access `http://localhost:<jetty-port>/rest-api-sample/` in your browser to view samples.
 
 Test Account
 ------------
@@ -13,57 +15,55 @@ Test Account
    * Test Client ID and Client Secret can be found in the file sdk_config.properties file under src/main/resources/ folder.
    * The endpoint URL for token generation and API calls are fetched from sdk_config.properties file under src/main/resources/ folder.
    * AccessToken are generated once using GenerateAccessToken.java and used for the samples.
-   
-Build and run the samples
---------------------------
-	* Simply run `mvn install` to build war file.
-	* Run `mvn jetty:run` to run the war file using maven jetty.
-	* Access `http://localhost:<jetty-port>/rest-api-sample/` in your browser to play with the test pages, `<jetty-port>` is configurable in pom.xml.
 
-Samples
-========
+## OpenID Connect Integration
+   * Redirect your buyer to `Authorization.getRedirectUrl(redirectURI, scope, configurationMap);` to obtain authorization.
+   * Capture the authorization code that is available as a query parameter (`code`) in the redirect url
+   * Exchange the authorization code for a access token, refresh token, id token combo
 
-Save a credit card
-----------------------
+```java
+    Map<String, String> configurationMap = new HashMap<String, String>();
+    configurationMap.put(Constants.CLIENT_ID, "...");
+    configurationMap.put(Constants.CLIENT_SECRET, "...");
+    configurationMap.put(Constants.ENDPOINT, "https://api.paypal.com/");
+    APIContext apiContext = new APIContext();
+    apiContext.setConfigurationMap(configurationMap);
+    ...
+    CreateFromAuthorizationCodeParameters param = new CreateFromAuthorizationCodeParameters();
+    param.setCode(code);
+    Tokeninfo info = Tokeninfo.createFromAuthorizationCode(apiContext, param);
+    String accessToken = info.getAccessToken();
+```
+   * The access token is valid for a predefined duration and can be used for seamless XO or for retrieving user information
 
-Save a credit card shows you how to create a CreditCard by POSTing to the URI /v1/vault/credit-card.
+```java
+    Map<String, String> configurationMap = new HashMap<String, String>();
+    configurationMap.put(Constants.CLIENT_ID, "...");
+    configurationMap.put(Constants.CLIENT_SECRET, "...");
+    configurationMap.put(Constants.ENDPOINT, "https://api.paypal.com/");
+    APIContext apiContext = new APIContext();
+    apiContext.setConfigurationMap(configurationMap);
+    ...
+    Tokeninfo info = new Tokeninfo();
+    info.setRefreshToken("refreshToken");
+    UserinfoParameters param = new UserinfoParameters();
+    param.setAccessToken(info.getAccessToken());
+    Userinfo userInfo = Userinfo.userinfo(apiContext, param);
+```
+   * If the access token has expired, you can obtain a new access token using the refresh token from the 3'rd step.
 
-Payment with a credit card
---------------------------
+```java
+    Map<String, String> configurationMap = new HashMap<String, String>();
+    configurationMap.put(Constants.CLIENT_ID, "...");
+    configurationMap.put(Constants.CLIENT_SECRET, "...");
+    configurationMap.put(Constants.ENDPOINT, "https://api.paypal.com/");
+    APIContext apiContext = new APIContext();
+    apiContext.setConfigurationMap(configurationMap);
+    ...
+    CreateFromRefreshTokenParameters param = new CreateFromRefreshTokenParameters();
+    param.setScope("openid"); // Optional
+    Tokeninfo info = new Tokeninfo // Create Token info object; setting the refresh token
+    info.setRefreshToken("refreshToken");
 
-Payment with a credit card shows you how to create a Payment by POSTing a Payment object to the URI '/v1/payments/payment'. This sample typically shows you how to create a Payment using CreditCard as a payment method.
-
-Payment with a PayPal Account
------------------------------
-
-Payment with a PayPal Account shows you how to create a Payment by POSTing a Payment object to the URI '/v1/payments/payment'. The sample includes a redirection flow to complete the payment.
-
-Payment with saved credit card
-------------------------------
-
-Payment with saved credit card shows you how to create a Payment by POSTing a Payment object to the URI '/v1/payments/payment'. This sample typically shows you how to create a Payment using saved CardID.
-
-Get credit card Details
------------------------
-
-Get credit card Details shows you how to retrieve a saved CreditCard from the service using a valid CardId.
-
-Get Payment History
--------------------
-
-Get Payment History shows you how to retrieve a PaymentHistory using count parameter. There are various parameters that can be used to retrieve a PaymentHistory like count, startId, startIndex, payeeId. This samples shows you how to use the count parameter.
-
-Get Payment Details
--------------------
-
-Get Payment Details shows you how to retrieve a Payment from the service. The sample uses a valid Payment ID as an input and fetches the Payment resource associated with the ID.
-
-Get Sale Details
-----------------
-
-Get Sale Details shows you how to retrieve a Sale using a Sale ID.
-
-Refund a Payment
-----------------
-
-Refund a Payment shows you how to Refund on a Sale resource. The sample uses a Sale ID and a valid Refund object to call the Refund API on the Sale object.
+    info.createFromRefreshToken(apiContext, param);
+```

@@ -49,11 +49,6 @@ public class PayoutItemDetails extends PayPalModel {
 	private String timeProcessed;
 
 	/**
-	 * @deprecated use errors instead
-	 */
-	private Error error;
-
-	/**
 	 * *
 	 */
 	private Error errors;

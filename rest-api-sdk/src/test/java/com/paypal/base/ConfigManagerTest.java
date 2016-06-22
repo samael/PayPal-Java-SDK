@@ -7,6 +7,7 @@ import java.util.Set;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+@SuppressWarnings("deprecation")
 public class ConfigManagerTest {
 
 	@Test(dataProvider = "configParams", dataProviderClass = DataProviderClass.class)

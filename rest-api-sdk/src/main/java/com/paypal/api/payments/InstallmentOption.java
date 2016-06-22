@@ -1,9 +1,5 @@
 package com.paypal.api.payments;
 
-import com.paypal.base.rest.JSONFormatter;
-import com.paypal.api.payments.Currency;
-import com.paypal.api.payments.Percentage;
-
 public class InstallmentOption  {
 
 	/**

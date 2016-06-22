@@ -1,8 +1,6 @@
 package com.paypal.api.payments;
 
-import com.paypal.base.rest.JSONFormatter;
 import com.paypal.base.rest.PayPalModel;
-import com.paypal.api.payments.CountryCode;
 
 public class CarrierAccount extends PayPalModel{
 

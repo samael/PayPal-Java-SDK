@@ -1,19 +1,23 @@
 package com.paypal.base;
 
-import com.paypal.base.exception.ClientActionRequiredException;
-import com.paypal.base.exception.HttpErrorException;
-import com.paypal.base.exception.InvalidResponseDataException;
-import com.paypal.base.exception.SSLConfigurationException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.paypal.base.exception.ClientActionRequiredException;
+import com.paypal.base.exception.HttpErrorException;
+import com.paypal.base.exception.InvalidResponseDataException;
+import com.paypal.base.exception.SSLConfigurationException;
 
 /**
  * Base HttpConnection class

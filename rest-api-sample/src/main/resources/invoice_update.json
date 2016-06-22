@@ -3,12 +3,12 @@
   "number": "12345",
   "status": "DRAFT",
   "merchant_info": {
-    "email": "dennis@sample.com",
+    "email": "jaypatel512-facilitator@hotmail.com",
     "first_name": "Dennis",
     "last_name": "Doctor",
     "business_name": "Medical Professionals, LLC",
     "phone": {
-      "country_code": "US",
+      "country_code": "001",
       "national_number": "5032141716"
     },
     "address": {
@@ -52,7 +52,7 @@
   ],
   "invoice_date": "2014-01-07 PST",
   "payment_term": {
-    "term_type": "NO_DUE_DATE"
+    "term_type": "DUE_ON_RECEIPT"
   },
   "tax_calculated_after_discount": false,
   "tax_inclusive": false,

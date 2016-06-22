@@ -12,7 +12,7 @@ public interface APICallPreHandlerFactory {
 	/**
 	 * Creates an instance of {@link APICallPreHandler}
 	 * 
-	 * @return
+	 * @return APICallPreHandler
 	 */
 	APICallPreHandler createAPICallPreHandler();
 

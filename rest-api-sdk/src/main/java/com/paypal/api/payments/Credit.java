@@ -15,10 +15,6 @@ public class Credit  extends PayPalModel {
 	 */
 	private String type;
 
-	/**
-	 * URI to the associated terms
-	 */
-	private String terms;
 
 	/**
 	 * Default Constructor
@@ -49,5 +45,11 @@ public class Credit  extends PayPalModel {
 		return this.id;
 	}
 
+	/**
+	 * Getter for type
+	 */
+	public String getType() {
+		return this.type;
+	}
 
 }

@@ -68,7 +68,6 @@ public class CreateBatchPayoutServlet extends HttpServlet {
 		req.getRequestDispatcher("response.jsp").forward(req, resp);
 	}
 
-	@SuppressWarnings("unchecked")
 	public PayoutBatch createBatchPayout(HttpServletRequest req,
 			HttpServletResponse resp) {
 		// ###Payout

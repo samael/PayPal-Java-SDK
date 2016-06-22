@@ -1,7 +1,6 @@
 package com.paypal.api.payments;
 
-import junit.framework.Assert;
-
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class CreditCardTokenTestCase {

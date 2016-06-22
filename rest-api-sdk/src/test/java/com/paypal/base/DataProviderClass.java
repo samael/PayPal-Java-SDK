@@ -6,6 +6,7 @@ import java.io.InputStream;
 
 import org.testng.annotations.DataProvider;
 
+@SuppressWarnings("deprecation")
 public class DataProviderClass {
 	static ConfigManager conf;
 

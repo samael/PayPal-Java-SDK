@@ -116,7 +116,7 @@ public class CaptureTestCase {
 	@Test(groups = "integration", expectedExceptions = { IllegalArgumentException.class })
 	public void testGetCaptureNullCaptureId() throws PayPalRESTException {
 		logger.info("**** Get Capture (Null Capture Id) ****");
-		Capture capture = Capture.get(TokenHolder.accessToken, null);
+		Capture.get(TokenHolder.accessToken, null);
 	}
 
 	@Test(groups = "integration", expectedExceptions = { IllegalArgumentException.class })

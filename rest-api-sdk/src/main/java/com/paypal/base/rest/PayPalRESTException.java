@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.paypal.base.exception.HttpErrorException;
+import com.google.gson.Gson;
 import com.paypal.api.payments.Error;
 
 /**
@@ -66,12 +67,12 @@ public class PayPalRESTException extends Exception {
 	 * 
 	 * @param httpErrorException
 	 * 				{@link HttpErrorException} thrown from API call		
-	 * @return
+	 * @return PayPalRESTException
 	 */
 	protected static PayPalRESTException createFromHttpErrorException(HttpErrorException httpErrorException){
 		PayPalRESTException ppre = new PayPalRESTException(httpErrorException.getMessage(), httpErrorException);
 		ppre.setResponsecode(httpErrorException.getResponsecode());
-		if( httpErrorException.getResponsecode() >= 400 &&  httpErrorException.getErrorResponse()!=null){
+		if( httpErrorException.getResponsecode() >= 400 &&  httpErrorException.getErrorResponse()!=null && isJSONValid(httpErrorException.getErrorResponse())) {
 			try{
 				Error details = JSONFormatter.fromJSON(httpErrorException.getErrorResponse(), Error.class);	
 				ppre.setDetails(details);
@@ -85,5 +86,14 @@ public class PayPalRESTException extends Exception {
 	public String toString() {
 		return "response-code: " + this.responsecode + "\tdetails: " + this.details;
 	}
+	
+	private static boolean isJSONValid(String jsonInString) {
+	      try {
+	          new Gson().fromJson(jsonInString, Object.class);
+	          return true;
+	      } catch(com.google.gson.JsonSyntaxException ex) { 
+	          return false;
+	      }
+	  }
 
 }

@@ -2,7 +2,7 @@ sudo: false
 language: java
 jdk:
   - oraclejdk7
-after_script: mvn test 
+after_script: ./gradlew clean test
 notifications:
   recipients:
     - DL-PP-JAVA-SDK@paypal.com

@@ -13,7 +13,6 @@ import com.paypal.base.Constants;
 import com.paypal.base.SDKUtil;
 import com.paypal.base.SDKVersion;
 import com.paypal.base.codec.binary.Base64;
-import com.paypal.base.credential.ICredential;
 import com.paypal.base.exception.ClientActionRequiredException;
 import com.paypal.base.util.UserAgentHeader;
 
@@ -163,7 +162,7 @@ public class RESTAPICallPreHandler implements APICallPreHandler {
 		return getProcessedEndPoint();
 	}
 
-	public ICredential getCredential() {
+	public OAuthTokenCredential getCredential() {
 		return null;
 	}
 

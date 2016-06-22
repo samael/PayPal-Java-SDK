@@ -67,8 +67,7 @@ public class CreateSinglePayoutServlet extends HttpServlet {
 		createSynchronousSinglePayout(req, resp);
 		req.getRequestDispatcher("response.jsp").forward(req, resp);
 	}
-
-	@SuppressWarnings("unchecked")
+	
 	public PayoutBatch createSynchronousSinglePayout(HttpServletRequest req,
 			HttpServletResponse resp) {
 		// ###Payout

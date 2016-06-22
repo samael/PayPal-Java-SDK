@@ -20,6 +20,7 @@ import com.paypal.api.payments.Transaction;
 import com.paypal.base.ClientCredentials;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
+import com.paypal.base.rest.PayPalResource;
 
 public class FuturePaymentSample {
 	
@@ -47,7 +48,7 @@ public class FuturePaymentSample {
 		if (authorizationCode != null && authorizationCode.trim().length() > 0) {
 			log.info("creating future payment with auth code: " + authorizationCode);
 			
-			ClientCredentials credentials = futurePayment.getClientCredential();
+			ClientCredentials credentials = PayPalResource.getCredential();
 			CreateFromAuthorizationCodeParameters params = new CreateFromAuthorizationCodeParameters();
 			params.setClientID(credentials.getClientID());
 			params.setClientSecret(credentials.getClientSecret());
@@ -75,7 +76,7 @@ public class FuturePaymentSample {
 
 	public static void main(String[] args) {
 		try {
-			
+
 			String authorizationCode = "";
 			String correlationId = "";
 			for (int i = 0; i < args.length; ++i) {
@@ -89,6 +90,7 @@ public class FuturePaymentSample {
 
 			FuturePaymentSample fps = new FuturePaymentSample();
 			Payment payment = fps.create(correlationId, authorizationCode);
+			System.out.println(Payment.getLastResponse());
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println(Payment.getLastRequest());

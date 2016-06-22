@@ -1,9 +1,6 @@
 package com.paypal.api.sample;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 
 import com.google.gson.JsonIOException;
@@ -13,8 +10,6 @@ import com.paypal.api.payments.Invoice;
 import com.paypal.api.payments.Invoices;
 import com.paypal.api.payments.Notification;
 import com.paypal.api.payments.Search;
-import com.paypal.api.payments.util.GenerateAccessToken;
-import com.paypal.base.rest.JSONFormatter;
 import com.paypal.base.rest.PayPalRESTException;
 
 /**
@@ -23,10 +18,7 @@ import com.paypal.base.rest.PayPalRESTException;
  * https://developer.paypal.com/webapps/developer/docs/api/#invoicing
  *
  */
-public class InvoiceSample {
-
-	private Invoice invoice = null;
-	private String accessToken = null;
+public class InvoiceSample extends SampleBase<Invoice> {
 
 	/**
 	 * Initialize and instantiate an Invoice object
@@ -37,34 +29,7 @@ public class InvoiceSample {
 	 */
 	public InvoiceSample() throws PayPalRESTException, JsonSyntaxException,
 			JsonIOException, FileNotFoundException {
-
-		// initialize Invoice with credentials. User credentials must be stored
-		// in the file
-		Invoice.initConfig(new File(".",
-						"src/main/resources/sdk_config.properties"));
-
-		// get an access token
-		accessToken = GenerateAccessToken.getAccessToken();
-	}
-	
-	private static Invoice loadInvoice(String jsonFile) {
-	    try {
-		    BufferedReader br = new BufferedReader(new FileReader("src/main/resources/" + jsonFile));
-	        StringBuilder sb = new StringBuilder();
-	        String line = br.readLine();
-
-	        while (line != null) {
-	            sb.append(line);
-	            sb.append(System.getProperty("line.separator"));
-	            line = br.readLine();
-	        }
-	        br.close();
-	        return JSONFormatter.fromJSON(sb.toString(), Invoice.class);
-	        
-	    } catch (IOException e) {
-	    	e.printStackTrace();
-	    	return new Invoice();
-	    }
+		super(new Invoice());
 	}
 
 	/**
@@ -75,11 +40,11 @@ public class InvoiceSample {
 	 * @return newly created Invoice instance
 	 * @throws PayPalRESTException
 	 */
-	public Invoice create() throws PayPalRESTException {
+	public Invoice create() throws PayPalRESTException, IOException {
 		// populate Invoice object that we are going to play with
-		invoice = loadInvoice("invoice_create.json");
-		invoice = invoice.create(accessToken);
-		return invoice;
+		super.instance = load("invoice_create.json", Invoice.class);
+		super.instance = super.instance.create(accessToken);
+		return super.instance;
 	}
 
 	/**
@@ -90,7 +55,7 @@ public class InvoiceSample {
 	 * @throws PayPalRESTException
 	 */
 	public void send() throws PayPalRESTException {
-		invoice.send(accessToken);
+		super.instance.send(accessToken);
 	}
 
 	/**
@@ -101,12 +66,12 @@ public class InvoiceSample {
 	 * @return updated Invoice instance
 	 * @throws PayPalRESTException
 	 */
-	public Invoice update() throws PayPalRESTException {
-		String id = invoice.getId();
-		invoice = loadInvoice("invoice_update.json");
-		invoice.setId(id);
-		invoice = invoice.update(accessToken);
-		return invoice;
+	public Invoice update() throws PayPalRESTException, IOException {
+		String id = super.instance.getId();
+		super.instance = load("invoice_update.json", Invoice.class);
+		super.instance.setId(id);
+		super.instance = super.instance.update(accessToken);
+		return super.instance;
 	}
 
 	/**
@@ -118,8 +83,8 @@ public class InvoiceSample {
 	 * @throws PayPalRESTException
 	 */
 	public Invoice retrieve() throws PayPalRESTException {
-		invoice = Invoice.get(accessToken, invoice.getId());
-		return invoice;
+		super.instance = Invoice.get(accessToken, super.instance.getId());
+		return super.instance;
 	}
 
 	/**
@@ -149,7 +114,7 @@ public class InvoiceSample {
 		search.setPage(1);
 		search.setPageSize(20);
 		search.setTotalCountRequired(true);
-		return invoice.search(accessToken, search);
+		return super.instance.search(accessToken, search);
 	}
 
 	/**
@@ -164,7 +129,7 @@ public class InvoiceSample {
 		notification.setSubject("Past due");
 		notification.setNote("Please pay soon");
 		notification.setSendToMerchant(true);
-		invoice.remind(accessToken, notification);
+		super.instance.remind(accessToken, notification);
 	}
 
 	/**
@@ -180,7 +145,7 @@ public class InvoiceSample {
 		cancelNotification.setNote("Canceling invoice");
 		cancelNotification.setSendToMerchant(true);
 		cancelNotification.setSendToPayer(true);
-		invoice.cancel(accessToken, cancelNotification);
+		super.instance.cancel(accessToken, cancelNotification);
 	}
 
 	/**
@@ -190,7 +155,7 @@ public class InvoiceSample {
 	 * 
 	 * @throws PayPalRESTException
 	 */
-	public void delete() throws PayPalRESTException {
+	public void delete() throws PayPalRESTException, IOException {
 		Invoice newInvoice = this.create();
 		newInvoice.delete(accessToken);
 	}
@@ -229,6 +194,8 @@ public class InvoiceSample {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (PayPalRESTException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

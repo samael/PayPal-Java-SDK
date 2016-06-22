@@ -2,15 +2,11 @@ package com.paypal.api.payments;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import org.testng.log4testng.Logger;
 
 import com.paypal.base.rest.JSONFormatter;
 
 public class PayoutItemTestCase {
-
-	private static final Logger logger = Logger
-			.getLogger(PayoutItemTestCase.class);
-
+	
 	public static String getJson() {
 		return "{\"recipient_type\":\"TestSample\",\"amount\":"
 				+ CurrencyTestCase.getJson()

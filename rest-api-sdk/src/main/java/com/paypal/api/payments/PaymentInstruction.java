@@ -1,25 +1,14 @@
 package com.paypal.api.payments;
 
-import com.paypal.base.rest.JSONFormatter;
-import com.paypal.api.payments.RecipientBankingInstruction;
-import com.paypal.api.payments.Currency;
-import com.paypal.api.payments.DefinitionsLinkdescription;
-import java.util.List;
-import com.paypal.base.rest.PayPalRESTException;
-import com.paypal.base.rest.PayPalResource;
-import com.paypal.base.rest.OAuthTokenCredential;
-import com.paypal.base.rest.PayPalModel;
-import com.paypal.base.rest.HttpMethod;
-import com.paypal.base.rest.RESTUtil;
-import com.paypal.base.rest.QueryParameters;
-import com.paypal.base.rest.APIContext;
-import com.paypal.base.Constants;
-import com.paypal.base.SDKVersion;
 import java.io.File;
 import java.io.InputStream;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Properties;
+
+import com.paypal.base.rest.OAuthTokenCredential;
+import com.paypal.base.rest.PayPalModel;
+import com.paypal.base.rest.PayPalRESTException;
+import com.paypal.base.rest.PayPalResource;
 
 public class PaymentInstruction extends PayPalModel {
 

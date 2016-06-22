@@ -164,7 +164,7 @@ public final class ConfigManager {
 	/**
 	 * Loads the internal properties with the passed {@link InputStream}
 	 * 
-	 * @deprecated use {@link initConfig()} instead 
+	 * @deprecated 
 	 * @param is
 	 *            InputStream
 	 * 
@@ -182,7 +182,7 @@ public final class ConfigManager {
 	 * Initializes the internal properties with the passed {@link Properties}
 	 * instance
 	 * 
-	 * @deprecated use {@link initConfig()} instead
+	 * @deprecated 
 	 * @param properties
 	 *            Properties instance
 	 * 
@@ -294,7 +294,7 @@ public final class ConfigManager {
 
 	/**
 	 * @deprecated
-	 * @return
+	 * @return boolean
 	 */
 	public boolean isPropertyLoaded() {
 		return propertyLoaded;
