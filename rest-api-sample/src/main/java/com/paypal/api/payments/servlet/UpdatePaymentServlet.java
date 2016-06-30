@@ -3,21 +3,6 @@
 // API used: GET /v1/payments/payouts/<Payout-Batch-Id>
 package com.paypal.api.payments.servlet;
 
-import static com.paypal.api.payments.util.SampleConstants.clientID;
-import static com.paypal.api.payments.util.SampleConstants.clientSecret;
-import static com.paypal.api.payments.util.SampleConstants.mode;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.log4j.Logger;
-
 import com.paypal.api.payments.Amount;
 import com.paypal.api.payments.Details;
 import com.paypal.api.payments.Patch;
@@ -25,6 +10,17 @@ import com.paypal.api.payments.Payment;
 import com.paypal.api.payments.util.ResultPrinter;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
+import org.apache.log4j.Logger;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.paypal.api.payments.util.SampleConstants.*;
 
 public class UpdatePaymentServlet extends HttpServlet {
 
@@ -54,8 +50,7 @@ public class UpdatePaymentServlet extends HttpServlet {
 		// ### Create a Payout Batch
 		// We are re-using the CreateBatchPayoutServlet to create a batch payout
 		// for us. This will make sure the samples will work all the time.
-		PaymentWithPayPalServlet servlet = new PaymentWithPayPalServlet();
-		Payment payment = servlet.createPayment(req, resp);
+		Payment payment = AuthorizePaymentWithPayPalServlet.createPaymentForRequest(req);
 
 		// ### Create Patch Request
 		List<Patch> patchRequest = new ArrayList<Patch>();

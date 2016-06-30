@@ -38,6 +38,14 @@
 		<url-pattern>/paymentwithcreditcard</url-pattern>
 	</servlet-mapping>
 	<servlet>
+		<servlet-name>AuthorizePaymentWithPayPalServlet</servlet-name>
+		<servlet-class>com.paypal.api.payments.servlet.AuthorizePaymentWithPayPalServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AuthorizePaymentWithPayPalServlet</servlet-name>
+		<url-pattern>/authorizewithpaypal</url-pattern>
+	</servlet-mapping>
+	<servlet>
 		<servlet-name>PaymentWithPayPalServlet</servlet-name>
 		<servlet-class>com.paypal.api.payments.servlet.PaymentWithPayPalServlet</servlet-class>
 	</servlet>
